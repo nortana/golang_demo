@@ -9,6 +9,7 @@ type HeroNode struct {
 	no int
 	name string
 	nikename string
+	pre *HeroNode
 	next *HeroNode
 }
 
@@ -23,7 +24,7 @@ func InsertHeroNode(head *HeroNode, newHeroNode *HeroNode) {
 		temp = temp.next
 	}
 	temp.next = newHeroNode
-
+	newHeroNode.pre = temp
 }
 
 
@@ -48,7 +49,19 @@ func InsertHeroNode2(head *HeroNode, newHeroNode *HeroNode) {
 		return
 	} else {
 		newHeroNode.next = temp.next
+
+		newHeroNode.pre = temp
+
+		if temp.next != nil {
+			temp.next.pre = newHeroNode
+		}
+		
+
+
 		temp.next = newHeroNode
+
+
+
 
 	}
 
@@ -69,6 +82,9 @@ func DelHeroNode(head *HeroNode, id int){
 
 	if flag {
 		temp.next = temp.next.next
+		if temp.next != nil {
+			temp.next.pre = temp
+		}
 	} else {
 		fmt.Println("id 不存在")
 	}
@@ -92,6 +108,38 @@ func ListHeroNode(head *HeroNode){
 			return
 		 }
 	}
+	fmt.Println()
+	
+}
+
+
+func ListHeroNode2(head *HeroNode){
+	fmt.Println("倒序打印：")
+
+	temp := head
+
+	if temp.next == nil {
+		fmt.Println("空————————————————————")
+		return
+	}
+
+	for {
+		if temp.next == nil {
+			break
+		}
+		temp = temp.next
+	}
+
+
+	for {
+		fmt.Printf("[%d, %s, %s] ==>",temp.no,
+		 temp.name,temp.nikename)
+		 temp =temp.pre
+		 if temp.pre == nil {
+			return
+		 }
+	}
+	fmt.Println()
 	
 }
 
@@ -115,14 +163,16 @@ func main(){
 		name:"林冲",
 		nikename:"豹子头",
 	}
-	InsertHeroNode2(hero,hero3)
-	InsertHeroNode2(hero,hero1)
-	InsertHeroNode2(hero,hero2)
+	
+	InsertHeroNode(hero,hero1)
+	InsertHeroNode(hero,hero2)
+	InsertHeroNode(hero,hero3)
 	ListHeroNode(hero)
 
 	fmt.Println()
-	DelHeroNode(hero,2)
-	ListHeroNode(hero)
+	//DelHeroNode(hero,2)
+	//ListHeroNode(hero)
+	ListHeroNode2(hero)
 
 }
 
